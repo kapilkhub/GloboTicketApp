@@ -9,6 +9,11 @@
 			<Grid>
 				<VerticalStackLayout Padding="10">
 					<!-- Name -->
+
+					<Label x:Name="LabelEventName" Style="{StaticResource TitleLabelStyle}"/>
+
+					<Image WidthRequest="100" />
+
 					<Grid RowDefinitions="Auto,*">
 						<Grid
                            ColumnDefinitions=".3*,.7*"
