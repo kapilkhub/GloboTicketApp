@@ -1,11 +1,30 @@
-﻿namespace GloboTicketApp.ViewModels
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace GloboTicketApp.ViewModels
 {
 
-	public class EventDetailViewModel
+	public class EventDetailViewModel : INotifyPropertyChanged
 	{
+		private double _price;
+		private bool _showLargerImage;
+	
+
 		public Guid Id { get; set; }
 		public string Name { get; set; } = default!;
-		public double Price { get; set; }
+		public double Price
+		{
+			get => _price; 
+			set
+			{
+				
+				if (!Equals(_price, value))
+				{
+					_price = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 		public string ImageUrl { get; set; }
 		public EventStatus EventStatus { get; set; }
 		public DateTime Date { get; set; } = DateTime.Now;
@@ -13,6 +32,16 @@
 		public List<string> Artists { get; set; } = new();
 		public CategoryViewModel Category { get; set; } = new();
 
+		public bool ShowThumbnailImage => !ShowLargerImage;
+		public bool ShowLargerImage { get => _showLargerImage; set {
+				if (!Equals(_showLargerImage, value))
+				{
+					_showLargerImage = value;
+					OnPropertyChanged();
+					OnPropertyChanged(nameof(ShowThumbnailImage));
+				}
+			} 
+		}
 		public EventDetailViewModel()
 		{
 			Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
@@ -29,5 +58,14 @@
 				Name = "Concert"
 			};
 		}
+
+		public event PropertyChangedEventHandler? PropertyChanged;
+
+		public void OnPropertyChanged([CallerMemberName]string? propertyName=null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+
 	}
 }

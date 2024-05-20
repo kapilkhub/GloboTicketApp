@@ -9,6 +9,6 @@ public partial class EventDetailPage : ContentPage
 		InitializeComponent();
 		BindingContext = new EventDetailViewModel();
 
-		LabelEventName.SetBinding(Label.TextProperty, nameof(EventDetailViewModel.Name), BindingMode.OneWay);
+		
 	}
 }
