@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace GloboTicketApp.ViewModels
 {
@@ -8,7 +9,7 @@ namespace GloboTicketApp.ViewModels
 	{
 		private double _price;
 		private bool _showLargerImage;
-	
+		private EventStatus _eventStatus;
 
 		public Guid Id { get; set; }
 		public string Name { get; set; } = default!;
@@ -26,7 +27,15 @@ namespace GloboTicketApp.ViewModels
 			}
 		}
 		public string ImageUrl { get; set; }
-		public EventStatus EventStatus { get; set; }
+		public EventStatus EventStatus { get => _eventStatus; set  {
+				if (value != _eventStatus) 
+				{
+					_eventStatus = value;
+					OnPropertyChanged();
+					((Command)CancelEventCommand).ChangeCanExecute();
+				}
+			} 
+		}
 		public DateTime Date { get; set; } = DateTime.Now;
 		public string Description { get; set; }
 		public List<string> Artists { get; set; } = new();
@@ -44,6 +53,7 @@ namespace GloboTicketApp.ViewModels
 		}
 		public EventDetailViewModel()
 		{
+			CancelEventCommand = new Command(CancelEvent, CanCancelEvent);
 			Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
 			Name = "John Egberts Live";
 			Price = 65;
@@ -58,6 +68,18 @@ namespace GloboTicketApp.ViewModels
 				Name = "Concert"
 			};
 		}
+
+		private bool CanCancelEvent(object arg)
+		{
+			return EventStatus != EventStatus.Cancelled;
+		}
+
+		private void CancelEvent(object obj)
+		{
+			EventStatus = EventStatus.Cancelled;
+		}
+
+		public ICommand CancelEventCommand { get; }
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -2,7 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GloboTicketApp.Views.EventDetailPage"
+			 xmlns:converters="clr-namespace:GloboTicketApp.Converters"
              Title="EventDetailPage">
+	<ContentPage.Resources>
+		<converters:StatusEnumToTextConvertor x:Key="StatusEnumToTextConvertor" />
+	</ContentPage.Resources>
 
 	<Grid>
 		<ScrollView>
@@ -65,7 +69,7 @@
                                Grid.Row="2"
                                Grid.Column="1"
                                Style="{StaticResource ValueLabelStyle}"
-							   Text="{Binding EventStatus}"
+							   Text="{Binding EventStatus,Converter={StaticResource StatusEnumToTextConvertor}, Mode=OneWay}"
                               />
 
 							<!-- Row 4 Date -->
@@ -110,6 +114,8 @@
 						<Button 
                            Margin="0,10,0,0"
                            Text="Cancel event"
+						   Command="{Binding CancelEventCommand}"
+						   IsVisible="{Binding IsEnabled , Source={RelativeSource Self}}"
                           />
 					</VerticalStackLayout>
 				</VerticalStackLayout>
