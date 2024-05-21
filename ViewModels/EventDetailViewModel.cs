@@ -1,40 +1,37 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace GloboTicketApp.ViewModels
 {
 
-	public class EventDetailViewModel : INotifyPropertyChanged
+	public class EventDetailViewModel : ObservableObject
 	{
 		private double _price;
 		private bool _showLargerImage;
 		private EventStatus _eventStatus;
 
+		
+
+		public IRelayCommand CancelEventCommand { get; }
+
 		public Guid Id { get; set; }
 		public string Name { get; set; } = default!;
 		public double Price
 		{
-			get => _price; 
-			set
-			{
-				
-				if (!Equals(_price, value))
-				{
-					_price = value;
-					OnPropertyChanged();
-				}
-			}
+			get => _price;
+			set => SetProperty(ref _price, value); 
 		}
 		public string ImageUrl { get; set; }
-		public EventStatus EventStatus { get => _eventStatus; set  {
-				if (value != _eventStatus) 
+		public EventStatus EventStatus
+		{
+			get => _eventStatus;
+			set
+			{
+				if (SetProperty(ref _eventStatus, value))
 				{
-					_eventStatus = value;
-					OnPropertyChanged();
-					((Command)CancelEventCommand).ChangeCanExecute();
+					CancelEventCommand.NotifyCanExecuteChanged();
 				}
-			} 
+			}
 		}
 		public DateTime Date { get; set; } = DateTime.Now;
 		public string Description { get; set; }
@@ -42,18 +39,22 @@ namespace GloboTicketApp.ViewModels
 		public CategoryViewModel Category { get; set; } = new();
 
 		public bool ShowThumbnailImage => !ShowLargerImage;
-		public bool ShowLargerImage { get => _showLargerImage; set {
-				if (!Equals(_showLargerImage, value))
+		public bool ShowLargerImage
+		{
+			get => _showLargerImage; 
+			set
+			{
+				if (SetProperty(ref _showLargerImage, value))
 				{
-					_showLargerImage = value;
-					OnPropertyChanged();
 					OnPropertyChanged(nameof(ShowThumbnailImage));
 				}
-			} 
+			}
 		}
 		public EventDetailViewModel()
 		{
-			CancelEventCommand = new Command(CancelEvent, CanCancelEvent);
+			CancelEventCommand = new RelayCommand(CancelEvent, CanCancelEvent);
+			
+			
 			Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
 			Name = "John Egberts Live";
 			Price = 65;
@@ -69,24 +70,19 @@ namespace GloboTicketApp.ViewModels
 			};
 		}
 
-		private bool CanCancelEvent(object arg)
+		private bool CanCancelEvent()
 		{
 			return EventStatus != EventStatus.Cancelled;
 		}
 
-		private void CancelEvent(object obj)
+		private void CancelEvent()
 		{
 			EventStatus = EventStatus.Cancelled;
 		}
 
-		public ICommand CancelEventCommand { get; }
+		
 
-		public event PropertyChangedEventHandler? PropertyChanged;
-
-		public void OnPropertyChanged([CallerMemberName]string? propertyName=null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+		
 
 
 	}
