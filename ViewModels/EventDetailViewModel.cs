@@ -3,57 +3,56 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace GloboTicketApp.ViewModels
 {
-
-	public class EventDetailViewModel : ObservableObject
+	public partial class EventDetailViewModel : ObservableObject
 	{
-		private double _price;
-		private bool _showLargerImage;
+
+		[ObservableProperty]
+		[NotifyCanExecuteChangedFor(nameof (CancelEventCommand))]
 		private EventStatus _eventStatus;
 
-		
+		[ObservableProperty]
+		private Guid _id;
 
-		public IRelayCommand CancelEventCommand { get; }
+		[ObservableProperty]
+		private string _name;
 
-		public Guid Id { get; set; }
-		public string Name { get; set; } = default!;
-		public double Price
-		{
-			get => _price;
-			set => SetProperty(ref _price, value); 
-		}
-		public string ImageUrl { get; set; }
-		public EventStatus EventStatus
-		{
-			get => _eventStatus;
-			set
-			{
-				if (SetProperty(ref _eventStatus, value))
-				{
-					CancelEventCommand.NotifyCanExecuteChanged();
-				}
-			}
-		}
-		public DateTime Date { get; set; } = DateTime.Now;
-		public string Description { get; set; }
-		public List<string> Artists { get; set; } = new();
-		public CategoryViewModel Category { get; set; } = new();
+		[ObservableProperty]
+		private double _price;
+
+		[ObservableProperty]
+		private string _imageUrl;
+
+		[ObservableProperty]
+		private string _description;
+
+		[ObservableProperty]
+		private List<string> _artists = new();
+
+		[ObservableProperty]
+		private CategoryViewModel _category = new();
+
+		[ObservableProperty]
+		private DateTime _date = DateTime.Now;
+
+		[ObservableProperty]
+		[NotifyPropertyChangedFor(nameof(ShowThumbnailImage))]
+		private bool _showLargerImage;
+
 
 		public bool ShowThumbnailImage => !ShowLargerImage;
-		public bool ShowLargerImage
+
+		[RelayCommand(CanExecute = nameof(CanCancelEvent))]
+		private void CancelEvent()
 		{
-			get => _showLargerImage; 
-			set
-			{
-				if (SetProperty(ref _showLargerImage, value))
-				{
-					OnPropertyChanged(nameof(ShowThumbnailImage));
-				}
-			}
+			EventStatus = EventStatus.Cancelled;
 		}
+		private bool CanCancelEvent()
+		{
+			return EventStatus != EventStatus.Cancelled;
+		}
+
 		public EventDetailViewModel()
 		{
-			CancelEventCommand = new RelayCommand(CancelEvent, CanCancelEvent);
-			
 			
 			Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
 			Name = "John Egberts Live";
@@ -69,21 +68,6 @@ namespace GloboTicketApp.ViewModels
 				Name = "Concert"
 			};
 		}
-
-		private bool CanCancelEvent()
-		{
-			return EventStatus != EventStatus.Cancelled;
-		}
-
-		private void CancelEvent()
-		{
-			EventStatus = EventStatus.Cancelled;
-		}
-
-		
-
-		
-
 
 	}
 }

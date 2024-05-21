@@ -1,9 +1,14 @@
-﻿namespace GloboTicketApp.ViewModels
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace GloboTicketApp.ViewModels
 {
 
-	public class CategoryViewModel
+	public partial class CategoryViewModel: ObservableObject
 	{
-		public Guid Id { get; set; }
-		public string Name { get; set; } = default!;
+		[ObservableProperty]
+		private Guid _id;
+
+		[ObservableProperty]
+		private string _name = default!;
 	}
 }
