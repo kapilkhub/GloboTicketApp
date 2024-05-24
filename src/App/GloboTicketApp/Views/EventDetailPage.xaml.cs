@@ -4,10 +4,10 @@ namespace GloboTicketApp.Views;
 
 public partial class EventDetailPage : ContentPage
 {
-	public EventDetailPage()
+	public EventDetailPage(EventDetailViewModel eventDetailViewModel)
 	{
 		InitializeComponent();
-		BindingContext = new EventDetailViewModel();
+		BindingContext = eventDetailViewModel;
 
 		
 	}

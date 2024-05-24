@@ -1,5 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GloboTicketApp.Models;
+using GloboTicketApp.Services;
+using System.Collections.ObjectModel;
 
 namespace GloboTicketApp.ViewModels
 {
@@ -14,19 +18,19 @@ namespace GloboTicketApp.ViewModels
 		private Guid _id;
 
 		[ObservableProperty]
-		private string _name;
+		private string _name = default!;
 
 		[ObservableProperty]
 		private double _price;
 
 		[ObservableProperty]
-		private string _imageUrl;
+		private string _imageUrl = default!;
 
 		[ObservableProperty]
-		private string _description;
+		private string _description = default!;
 
 		[ObservableProperty]
-		private List<string> _artists = new();
+		private ObservableCollection<string> _artists = new();
 
 		[ObservableProperty]
 		private CategoryViewModel _category = new();
@@ -37,37 +41,58 @@ namespace GloboTicketApp.ViewModels
 		[ObservableProperty]
 		[NotifyPropertyChangedFor(nameof(ShowThumbnailImage))]
 		private bool _showLargerImage;
-
+		private readonly IEventService _eventService;
 
 		public bool ShowThumbnailImage => !ShowLargerImage;
 
 		[RelayCommand(CanExecute = nameof(CanCancelEvent))]
-		private void CancelEvent()
+		private async Task CancelEvent()
 		{
-			EventStatus = EventStatus.Cancelled;
+			if (await _eventService.UpdateStatus(Id, EventStatusModel.Cancelled))
+			{
+				EventStatus = EventStatus.Cancelled;
+			}
 		}
 		private bool CanCancelEvent()
 		{
 			return EventStatus != EventStatus.Cancelled;
 		}
 
-		public EventDetailViewModel()
+		public EventDetailViewModel(IEventService eventService)
 		{
-			
+			_eventService = eventService;
 			Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
-			Name = "John Egberts Live";
-			Price = 65;
-			ImageUrl = "https://lindseybroospluralsight.blob.core.windows.net/globoticket/images/banjo.jpg";
-			EventStatus = EventStatus.OnSale;
-			Date = DateTime.Now.AddMonths(6);
-			Description = "Join John for his farewell tour across 15 continents. John really needs no introduction since he has already mesmerized the world with his banjo.";
-			Artists = new List<string> { "John Egbert", "Jane Egbert" };
+			GetEvent(Id);
+			
+		}
+
+		public async void GetEvent(Guid id)
+		{
+			var @event = await _eventService.GetEvent(id);
+
+			if (@event != null)
+			{
+				MapEventData(@event);
+			}
+		}
+
+		private void MapEventData(EventModel @event)
+		{
+			Id = @event.Id;
+			Name = @event.Name;
+			Price = @event.Price;
+			ImageUrl = @event.ImageUrl!;
+			EventStatus = (EventStatus)@event.Status;
+			Date = @event.Date;
+			Artists = @event.Artists.ToObservableCollection();
+			Description = @event.Description!;
 			Category = new CategoryViewModel
 			{
-				Id = Guid.Parse("B0788D2F-8003-43C1-92A4-EDC76A7C5DDE"),
-				Name = "Concert"
+				Id = @event.Category.Id,
+				Name = @event.Category.Name
 			};
 		}
+
 
 	}
 }
