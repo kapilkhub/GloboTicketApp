@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GloboTicketApp.Views.EventOverviewPage"
+             Title="EventOverviewPage"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			 xmlns:converters="clr-namespace:GloboTicketApp.Converters"
+			 >
+	<ContentPage.Resources>
+		<toolkit:ListToStringConverter x:Key="ListToStringConverter" Separator=", "/>
+		<converters:StatusEnumToTextConvertor x:Key="StatusEnumToTextConvertor" />
+
+		<Style TargetType="Grid">
+			<Setter	Property="VisualStateManager.VisualStateGroups">
+				<VisualStateGroupList>
+					<VisualStateGroup Name="CommonStates">
+					<VisualState Name="Normal"></VisualState>
+					<VisualState Name="Selected">
+						<VisualState.Setters>
+							<Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+						</VisualState.Setters>
+					</VisualState>
+				</VisualStateGroup>
+				</VisualStateGroupList>
+			</Setter>
+
+		</Style>
+	</ContentPage.Resources>
+	<Grid>
+		<ScrollView>
+			<CollectionView ItemsSource="{Binding Events}" 
+							SelectionMode="Single" 
+							SelectedItem="{Binding SelectedEvent}">
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+
+						<Grid Padding="10" ColumnDefinitions="Auto,Auto">
+
+							<Image 
+								Source="{Binding ImageUrl, TargetNullValue=fallback.jpg}" 
+								Aspect="AspectFill"
+								WidthRequest="100"
+								VerticalOptions="Center"
+								/>
+
+							<VerticalStackLayout 
+								Grid.Column="1"
+								Padding="10"
+								HorizontalOptions="Center"
+								VerticalOptions="Center"
+								>
+								<Label 
+                                      Style="{StaticResource ValueLabelStyle}"
+                                      Margin="0"
+                                      Text="{Binding Name}"/>
+								<Label Text="{Binding Artists, Converter={StaticResource ListToStringConverter}}"/>
+								<Label Text="{Binding Price, StringFormat='{0:C}'}" />
+								<Label Text="{Binding Date, StringFormat='{0:d}'}" />
+								<Label Text="{Binding Category.Name}" />
+								<Label 
+                                            FontAttributes="Italic"
+                                            Text="{Binding Status, Converter={StaticResource StatusEnumToTextConverter}}"
+                                            TextColor="{StaticResource Primary}" />
+							</VerticalStackLayout>
+						</Grid>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</ScrollView>
+	</Grid>
+</ContentPage>
