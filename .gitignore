@@ -5,3 +5,5 @@
 /.vs
 *.user
 /src/App/obj
+/src/Api/GloboTicket.Admin.API/bin/Debug/net8.0
+/src/Api/GloboTicket.Admin.API/obj
