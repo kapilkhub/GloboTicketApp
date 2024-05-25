@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace GloboTicketApp.ViewModels
 {
-	public partial class EventDetailViewModel : ObservableObject
+	public partial class EventDetailViewModel : ObservableObject, IQueryAttributable
 	{
 
 		[ObservableProperty]
@@ -41,6 +41,7 @@ namespace GloboTicketApp.ViewModels
 		[ObservableProperty]
 		[NotifyPropertyChangedFor(nameof(ShowThumbnailImage))]
 		private bool _showLargerImage;
+
 		private readonly IEventService _eventService;
 
 		public bool ShowThumbnailImage => !ShowLargerImage;
@@ -61,12 +62,9 @@ namespace GloboTicketApp.ViewModels
 		public EventDetailViewModel(IEventService eventService)
 		{
 			_eventService = eventService;
-			Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
-			GetEvent(Id);
-			
 		}
 
-		public async void GetEvent(Guid id)
+		public async Task GetEvent(Guid id)
 		{
 			var @event = await _eventService.GetEvent(id);
 
@@ -93,6 +91,13 @@ namespace GloboTicketApp.ViewModels
 			};
 		}
 
-
+		public async Task ApplyQueryAttributes(IDictionary<string, object> query)
+		{
+			var eventId = Convert.ToString(query["EventId"]);
+			if (Guid.TryParse(eventId, out var selectedEventId))
+			{
+				await GetEvent(selectedEventId);
+			}
+		}
 	}
 }

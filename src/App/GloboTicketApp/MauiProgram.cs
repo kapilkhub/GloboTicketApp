@@ -23,7 +23,8 @@ namespace GloboTicketApp
 				.RegisterRepositories()
 				.RegisterServices()
 				.RegisterViewModels()
-				.RegisterViews();
+				.RegisterViews()
+				.RegisterNavigationServices();
 
 #if DEBUG
 			builder.Logging.AddDebug();
@@ -65,6 +66,12 @@ namespace GloboTicketApp
 			builder.Services.AddTransient<EventDetailPage>();
 			builder.Services.AddSingleton<EventOverviewPage>();
 
+			return builder;
+		}
+
+		private static MauiAppBuilder RegisterNavigationServices(this MauiAppBuilder builder)
+		{
+			builder.Services.AddSingleton<NavigationService>();
 			return builder;
 		}
 	}

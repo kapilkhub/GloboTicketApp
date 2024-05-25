@@ -30,7 +30,9 @@
 		<ScrollView>
 			<CollectionView ItemsSource="{Binding Events}" 
 							SelectionMode="Single" 
-							SelectedItem="{Binding SelectedEvent}">
+							SelectedItem="{Binding SelectedEvent}"
+							SelectionChangedCommand="{Binding NavigateToSelectedDetailCommand}"
+							>
 				<CollectionView.ItemTemplate>
 					<DataTemplate>
 

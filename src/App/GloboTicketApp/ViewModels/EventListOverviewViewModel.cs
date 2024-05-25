@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using GloboTicketApp.Models;
 using GloboTicketApp.Services;
 using System.Collections.ObjectModel;
@@ -19,6 +20,12 @@ namespace GloboTicketApp.ViewModels
 		{
 			_eventService = eventService;
 			GetEvents();
+		}
+
+		[RelayCommand]
+		private void NavigateToSelectedDetailCommand()
+		{
+			
 		}
 
 		private async void GetEvents()
