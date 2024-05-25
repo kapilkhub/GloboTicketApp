@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GloboTicketApp.Services
+﻿namespace GloboTicketApp.Services
 {
-	internal interface INavigationService
+	public interface INavigationService
 	{
+		Task GoToEventDetail(Guid id);
 	}
 }

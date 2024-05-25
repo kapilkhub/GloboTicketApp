@@ -29,20 +29,21 @@ namespace GloboTicketApp
 #if DEBUG
 			builder.Logging.AddDebug();
 #endif
-	
+
 			return builder.Build();
 		}
 
-		private static MauiAppBuilder RegisterRepositories(this MauiAppBuilder builder) 
+		private static MauiAppBuilder RegisterRepositories(this MauiAppBuilder builder)
 		{
 			var baseUrl = DeviceInfo.Platform == DevicePlatform.Android
 		  ? "http://10.0.2.2:5191"
 		  : "https://localhost:7185";
 
 			builder.Services.AddTransient<IEventRepository, EventRepository>();
-			builder.Services.AddHttpClient("GloboTicketAdminApiClient", client => {
+			builder.Services.AddHttpClient("GloboTicketAdminApiClient", client =>
+			{
 				client.BaseAddress = new Uri(baseUrl);
-				client.DefaultRequestHeaders.Add("Accept", "application/json"); 
+				client.DefaultRequestHeaders.Add("Accept", "application/json");
 			});
 
 			return builder;
@@ -71,7 +72,7 @@ namespace GloboTicketApp
 
 		private static MauiAppBuilder RegisterNavigationServices(this MauiAppBuilder builder)
 		{
-			builder.Services.AddSingleton<NavigationService>();
+			builder.Services.AddSingleton<INavigationService, NavigationService>();
 			return builder;
 		}
 	}

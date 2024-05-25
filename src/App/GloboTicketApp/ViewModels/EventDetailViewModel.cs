@@ -3,11 +3,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GloboTicketApp.Models;
 using GloboTicketApp.Services;
+using GloboTicketApp.ViewModels.Base;
 using System.Collections.ObjectModel;
 
 namespace GloboTicketApp.ViewModels
 {
-	public partial class EventDetailViewModel : ObservableObject, IQueryAttributable
+	public partial class EventDetailViewModel : ViewModelBase, IQueryAttributable
 	{
 
 		[ObservableProperty]
@@ -45,6 +46,15 @@ namespace GloboTicketApp.ViewModels
 		private readonly IEventService _eventService;
 
 		public bool ShowThumbnailImage => !ShowLargerImage;
+
+		public override async Task LoadAsync()
+		{
+			await Loading(async () => {
+				if (Id != Guid.Empty) { 
+				  await GetEvent(Id);
+				}
+			});
+		}
 
 		[RelayCommand(CanExecute = nameof(CanCancelEvent))]
 		private async Task CancelEvent()
@@ -91,12 +101,12 @@ namespace GloboTicketApp.ViewModels
 			};
 		}
 
-		public async Task ApplyQueryAttributes(IDictionary<string, object> query)
+		public void ApplyQueryAttributes(IDictionary<string, object> query)
 		{
 			var eventId = Convert.ToString(query["EventId"]);
 			if (Guid.TryParse(eventId, out var selectedEventId))
 			{
-				await GetEvent(selectedEventId);
+				Id=selectedEventId;
 			}
 		}
 	}

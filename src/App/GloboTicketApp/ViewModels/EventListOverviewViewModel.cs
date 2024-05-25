@@ -3,32 +3,42 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GloboTicketApp.Models;
 using GloboTicketApp.Services;
+using GloboTicketApp.ViewModels.Base;
 using System.Collections.ObjectModel;
 
 namespace GloboTicketApp.ViewModels
 {
-	public partial class EventListOverviewViewModel : ObservableObject
+	public partial class EventListOverviewViewModel : ViewModelBase
 	{
 		private readonly IEventService _eventService;
-
+		private readonly INavigationService _navigationService;
 		[ObservableProperty]
 		private ObservableCollection<EventListItemViewModel> _events = new();
 
 		[ObservableProperty]
 		private EventListItemViewModel? _selectedEvent;
-		public EventListOverviewViewModel(IEventService eventService)
+		public EventListOverviewViewModel(IEventService eventService, INavigationService navigationService)
 		{
 			_eventService = eventService;
-			GetEvents();
-		}
-
-		[RelayCommand]
-		private void NavigateToSelectedDetailCommand()
-		{
+			_navigationService = navigationService;
 			
 		}
 
-		private async void GetEvents()
+		[RelayCommand]
+		private void NavigateToSelectedDetail()
+		{
+			if (SelectedEvent is not null)
+			{
+				_navigationService.GoToEventDetail(SelectedEvent.Id);
+			}
+		}
+
+		public override async Task LoadAsync()
+		{
+			await Loading(GetEvents);
+		}
+
+		private async Task GetEvents()
 		{
 			List<EventModel> events = await _eventService.GetEvents();
 			List<EventListItemViewModel> listItems = new();
