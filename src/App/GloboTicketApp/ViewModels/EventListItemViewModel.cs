@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using GloboTicketApp.Messages;
 
 namespace GloboTicketApp.ViewModels
 {
-	public partial class EventListItemViewModel : ObservableObject
+	public partial class EventListItemViewModel : ObservableObject, IRecipient<StatusChangedMessage>
 	{
 		[ObservableProperty]
 		private Guid _id;
@@ -20,6 +22,8 @@ namespace GloboTicketApp.ViewModels
 		private List<string> _artists;
 		[ObservableProperty]
 		private CategoryViewModel? _category;
+		
+
 
 
 		public EventListItemViewModel(
@@ -40,6 +44,14 @@ namespace GloboTicketApp.ViewModels
 			Artists = artists;
 			EventStatus = status;
 			Category = category;
+		}
+
+		void IRecipient<StatusChangedMessage>.Receive(StatusChangedMessage message)
+		{
+			if (message.EventId == Id)
+			{
+				EventStatus = message.EventStatus;
+			}
 		}
 	}
 }

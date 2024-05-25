@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using GloboTicketApp.Messages;
 using GloboTicketApp.Models;
 using GloboTicketApp.Services;
 using GloboTicketApp.ViewModels.Base;
@@ -62,6 +64,7 @@ namespace GloboTicketApp.ViewModels
 			if (await _eventService.UpdateStatus(Id, EventStatusModel.Cancelled))
 			{
 				EventStatus = EventStatus.Cancelled;
+				WeakReferenceMessenger.Default.Send(new StatusChangedMessage { EventId = Id, EventStatus = EventStatus.Cancelled });
 			}
 		}
 		private bool CanCancelEvent()
