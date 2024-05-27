@@ -33,6 +33,12 @@ namespace GloboTicketApp.ViewModels
 			}
 		}
 
+		[RelayCommand]
+		private void NavigateToAddEvent() 
+		{
+			_navigationService.GoToAddEvent();
+		}
+
 		public override async Task LoadAsync()
 		{
 			await Loading(GetEvents);

@@ -7,6 +7,9 @@
     Shell.FlyoutBehavior="Disabled"
     Title="GloboTicketApp">
 
+	<Shell.TitleView>
+		<local:LogoView/>
+	</Shell.TitleView>
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:EventOverviewPage}"

@@ -59,12 +59,14 @@ namespace GloboTicketApp
 		{
 			builder.Services.AddSingleton<EventListOverviewViewModel>();
 			builder.Services.AddTransient<EventDetailViewModel>();
+			builder.Services.AddTransient<EventAddEditViewModel>();
 			return builder;
 		}
 
 		private static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
 		{
 			builder.Services.AddTransient<EventDetailPage>();
+			builder.Services.AddTransient<EventAddEditPage>();
 			builder.Services.AddSingleton<EventOverviewPage>();
 
 			return builder;

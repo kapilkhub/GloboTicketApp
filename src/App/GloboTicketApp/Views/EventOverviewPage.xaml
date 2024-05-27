@@ -15,63 +15,74 @@
 			<Setter	Property="VisualStateManager.VisualStateGroups">
 				<VisualStateGroupList>
 					<VisualStateGroup Name="CommonStates">
-					<VisualState Name="Normal"></VisualState>
-					<VisualState Name="Selected">
-						<VisualState.Setters>
-							<Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-						</VisualState.Setters>
-					</VisualState>
-				</VisualStateGroup>
+						<VisualState Name="Normal"></VisualState>
+						<VisualState Name="Selected">
+							<VisualState.Setters>
+								<Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+							</VisualState.Setters>
+						</VisualState>
+					</VisualStateGroup>
 				</VisualStateGroupList>
 			</Setter>
 
 		</Style>
 	</ContentPage.Resources>
+
+
 	<Grid>
 		<ScrollView>
-			<CollectionView ItemsSource="{Binding Events}" 
+			<Grid>
+				<StackLayout>
+					<Button 
+						Margin="5"
+						Command="{Binding NavigateToAddEventCommand}"
+						HorizontalOptions="Fill"
+						Text="Add event" />
+					<CollectionView ItemsSource="{Binding Events}" 
 							SelectionMode="Single" 
 							SelectedItem="{Binding SelectedEvent}"
 							SelectionChangedCommand="{Binding NavigateToSelectedDetailCommand}"
 							>
-				<CollectionView.ItemTemplate>
-					<DataTemplate>
+						<CollectionView.ItemTemplate>
+							<DataTemplate>
 
-						<Grid Padding="10" ColumnDefinitions="Auto,Auto">
+								<Grid Padding="10" ColumnDefinitions="Auto,Auto">
 
-							<Image 
+									<Image 
 								Source="{Binding ImageUrl, TargetNullValue=fallback.jpg}" 
 								Aspect="AspectFill"
 								WidthRequest="100"
 								VerticalOptions="Center"
 								/>
 
-							<VerticalStackLayout 
+									<VerticalStackLayout 
 								Grid.Column="1"
 								Padding="10"
 								HorizontalOptions="Center"
 								VerticalOptions="Center"
 								>
-								<Label 
+										<Label 
                                       Style="{StaticResource ValueLabelStyle}"
                                       Margin="0"
                                       Text="{Binding Name}"/>
-								<Label Text="{Binding Artists, Converter={StaticResource ListToStringConverter}}"/>
-								<Label Text="{Binding Price, StringFormat='{0:C}'}" />
-								<Label Text="{Binding Date, StringFormat='{0:d}'}" />
-								<Label Text="{Binding Category.Name}" />
-								<Label 
+										<Label Text="{Binding Artists, Converter={StaticResource ListToStringConverter}}"/>
+										<Label Text="{Binding Price, StringFormat='{0:C}'}" />
+										<Label Text="{Binding Date, StringFormat='{0:d}'}" />
+										<Label Text="{Binding Category.Name}" />
+										<Label 
                                             FontAttributes="Italic"
                                             Text="{Binding EventStatus, Converter={StaticResource StatusEnumToTextConverter}}"
                                             TextColor="{StaticResource Primary}" />
-							</VerticalStackLayout>
-						</Grid>
-					</DataTemplate>
-				</CollectionView.ItemTemplate>
-			</CollectionView>
+									</VerticalStackLayout>
+								</Grid>
+							</DataTemplate>
+						</CollectionView.ItemTemplate>
+					</CollectionView>
+				</StackLayout>
+			</Grid>
 		</ScrollView>
 		<Grid BackgroundColor="{ AppThemeBinding Light={StaticResource Gray200} ,Dark={StaticResource Gray500}}" IsVisible="{Binding IsLoading}">
 			<ActivityIndicator IsRunning="{Binding IsLoading}"/>
-		</Grid>	
+		</Grid>
 	</Grid>
 </views:ContentPageBase>

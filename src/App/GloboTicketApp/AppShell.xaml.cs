@@ -7,8 +7,8 @@ namespace GloboTicketApp
 		public AppShell()
 		{
 			InitializeComponent();
-
 			Routing.RegisterRoute("event", typeof(EventDetailPage));
+			Routing.RegisterRoute("event/add", typeof(EventAddEditPage));
 		}
 	}
 }
