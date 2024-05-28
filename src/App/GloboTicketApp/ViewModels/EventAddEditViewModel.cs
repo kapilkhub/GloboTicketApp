@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using GloboTicketApp.Models;
 using GloboTicketApp.Services;
 using GloboTicketApp.ViewModels.Base;
@@ -33,7 +34,26 @@ namespace GloboTicketApp.ViewModels
 		[ObservableProperty]
 		private CategoryViewModel _category = new();
 
+		[ObservableProperty]
+		[NotifyCanExecuteChangedFor(nameof(AddArtistCommand))]
+		private string _addedArtist= default!;
+
 		public ObservableCollection<CategoryViewModel> Categories { get; set; } = new();
+
+		public ObservableCollection<string> Artists { get; set; } = new();
+
+		[RelayCommand(CanExecute =nameof(CanAddArtist))]
+		private void AddArtist() 
+		{
+			Artists.Add(AddedArtist);
+			AddedArtist = string.Empty;
+		}
+
+		private bool CanAddArtist() 
+		{
+			return AddedArtist != string.Empty;
+		}
+
 
 		private readonly ICategoryService _categoryService;
 

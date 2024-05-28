@@ -101,7 +101,7 @@
 							 MinimumDate="{Binding MinDate}" />
 
 							<!--  Row 6 Artists  -->
-							<!--<Label Grid.Row="5"
+							<Label Grid.Row="5"
 							 Grid.Column="0"
 							 Text="Artists" 
 							 VerticalOptions="Start"/>
@@ -129,7 +129,7 @@
 								Text="+"
 								WidthRequest="50" />
 								</Grid>
-							</Grid>-->
+							</Grid>
 
 							<!--  Row 7 Description  -->
 							<Label Grid.Row="6"
