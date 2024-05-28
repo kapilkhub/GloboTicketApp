@@ -40,6 +40,7 @@ namespace GloboTicketApp
 		  : "https://localhost:7185";
 
 			builder.Services.AddTransient<IEventRepository, EventRepository>();
+			builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 			builder.Services.AddHttpClient("GloboTicketAdminApiClient", client =>
 			{
 				client.BaseAddress = new Uri(baseUrl);
@@ -52,6 +53,7 @@ namespace GloboTicketApp
 		private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
 		{
 			builder.Services.AddTransient<IEventService, EventService>();
+			builder.Services.AddTransient<ICategoryService, CategoryService>();
 			return builder;
 		}
 
@@ -60,6 +62,7 @@ namespace GloboTicketApp
 			builder.Services.AddSingleton<EventListOverviewViewModel>();
 			builder.Services.AddTransient<EventDetailViewModel>();
 			builder.Services.AddTransient<EventAddEditViewModel>();
+			
 			return builder;
 		}
 

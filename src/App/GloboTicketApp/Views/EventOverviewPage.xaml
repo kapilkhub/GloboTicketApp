@@ -71,7 +71,7 @@
 										<Label Text="{Binding Category.Name}" />
 										<Label 
                                             FontAttributes="Italic"
-                                            Text="{Binding EventStatus, Converter={StaticResource StatusEnumToTextConverter}}"
+                                            Text="{Binding EventStatus, Converter={StaticResource StatusEnumToTextConvertor}}"
                                             TextColor="{StaticResource Primary}" />
 									</VerticalStackLayout>
 								</Grid>
